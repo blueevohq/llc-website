@@ -95,7 +95,7 @@ nav.links a:hover::after,nav.links a:focus-visible::after{transform:scaleX(1)}
 .demo-label{font-size:13px;color:var(--dim);letter-spacing:.04em;margin-bottom:-8px}
 .demo-hint{font-size:12.5px;color:var(--dim);text-align:center}
 .demo-hint b{color:#6cb8ff;font-weight:600}
-.ring{position:relative;padding:1.5px;border-radius:46px;overflow:hidden;box-shadow:0 40px 90px -20px rgba(0,0,0,.75),0 0 140px -30px rgba(47,107,255,.75)}
+.ring{position:relative;padding:1.5px;border-radius:46px;overflow:hidden;overflow:clip;box-shadow:0 40px 90px -20px rgba(0,0,0,.75),0 0 140px -30px rgba(47,107,255,.75)}
 .ring::before{content:"";position:absolute;inset:-60%;background:conic-gradient(from 0deg,rgba(143,198,255,.0),rgba(143,198,255,.9),rgba(47,107,255,.2),rgba(143,198,255,0) 40%,rgba(143,198,255,0) 60%,rgba(79,140,255,.8),rgba(143,198,255,0));animation:spin 8s linear infinite}
 @keyframes spin{to{transform:rotate(1turn)}}
 .phone{position:relative;width:300px;height:610px;border-radius:44px;background:#0a0e19;padding:11px}
@@ -531,8 +531,9 @@ footer a:hover{color:#6cb8ff}
     at(10300,function(){cur=(cur+1)%SITES.length;screen.classList.remove("fade");play();});
   }
   function stopAuto(){auto=false;clear();toast.classList.remove("show");["tag-lang","tag-photos","tag-rev","tag-req"].forEach(function(t){setTag(t,false);});T("rev1").classList.remove("pending");T("rev2").classList.remove("pending");}
-  bEn.addEventListener("click",function(){stopAuto();lang="en";applyText();});
-  bEs.addEventListener("click",function(){stopAuto();lang="es";applyText();});
+  var langT;function manualLang(l){stopAuto();lang=l;applyText();flashLang();setTag("tag-lang",1);clearTimeout(langT);langT=setTimeout(function(){setTag("tag-lang",0);},2200);}
+  bEn.addEventListener("click",function(){manualLang("en");});
+  bEs.addEventListener("click",function(){manualLang("es");});
   function flashLang(){var g=document.querySelector(".m-lang"),h=document.querySelector(".demo-hint");[g,h].forEach(function(e){if(!e)return;e.classList.remove("flash");void e.offsetWidth;e.classList.add("flash");});}
   window.__mockLang=function(l){lang=l;applyText();};
   tabs.forEach(function(b,i){b.addEventListener("click",function(){stopAuto();scroller.style.transform="";show(i,lang);});});
