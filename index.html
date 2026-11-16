@@ -95,8 +95,9 @@ nav.links a:hover::after,nav.links a:focus-visible::after{transform:scaleX(1)}
 .demo-label{font-size:13px;color:var(--dim);letter-spacing:.04em;margin-bottom:-8px}
 .demo-hint{font-size:12.5px;color:var(--dim);text-align:center}
 .demo-hint b{color:#6cb8ff;font-weight:600}
-.ring{position:relative;padding:1.5px;border-radius:46px;overflow:hidden;overflow:clip;box-shadow:0 40px 90px -20px rgba(0,0,0,.75),0 0 140px -30px rgba(47,107,255,.75)}
-.ring::before{content:"";position:absolute;inset:-60%;background:conic-gradient(from 0deg,rgba(143,198,255,.0),rgba(143,198,255,.9),rgba(47,107,255,.2),rgba(143,198,255,0) 40%,rgba(143,198,255,0) 60%,rgba(79,140,255,.8),rgba(143,198,255,0));animation:spin 8s linear infinite}
+.ring{position:relative;z-index:1;padding:2.5px;border-radius:46px;overflow:hidden;overflow:clip;box-shadow:0 40px 90px -20px rgba(0,0,0,.75),0 0 140px -30px rgba(47,107,255,.75)}
+.ring::before,.ring-glow::before{content:"";position:absolute;inset:-60%;background:conic-gradient(from 0deg,rgba(108,184,255,0),rgba(200,230,255,1) 8%,rgba(108,184,255,.9) 14%,rgba(47,107,255,.25) 24%,rgba(108,184,255,0) 40%,rgba(108,184,255,0) 60%,rgba(108,184,255,1) 72%,rgba(47,107,255,.35) 80%,rgba(108,184,255,0) 90%);animation:spin 8s linear infinite}
+.ring-glow{position:absolute;top:-4px;left:0;right:0;margin:0 auto;width:314px;height:624px;border-radius:52px;overflow:hidden;overflow:clip;filter:blur(16px);opacity:.9;pointer-events:none;z-index:0}
 @keyframes spin{to{transform:rotate(1turn)}}
 .phone{position:relative;width:300px;height:610px;border-radius:44px;background:#0a0e19;padding:11px}
 .screen{position:relative;width:100%;height:100%;border-radius:34px;overflow:hidden;background:var(--s-bg);color:var(--s-ink);font-family:var(--body);transition:background .6s,color .6s}
@@ -158,7 +159,7 @@ nav.links a:hover::after,nav.links a:focus-visible::after{transform:scaleX(1)}
 .tag.t1{top:44px;left:-122px}.tag.t2{top:236px;right:-120px}.tag.t3{top:356px;left:-126px}.tag.t4{bottom:40px;right:-132px}
 @media (max-width:1100px){.tag.t1,.tag.t3{left:-70px}.tag.t2,.tag.t4{right:-70px}}
 @media (max-width:560px){.phone-wrap{display:flex;flex-direction:column;align-items:center}.tags{position:static;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:16px;max-width:340px}.tag{position:static;font-size:12px;padding:6px 11px;transform:none!important;opacity:1!important}}
-@media (prefers-reduced-motion:no-preference){.ring{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}}
+@media (prefers-reduced-motion:no-preference){.ring,.ring-glow{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}}
 @keyframes rise{from{transform:translateY(24px)}to{transform:none}}
 .strip span{transition:color .3s}
 .strip span.on{color:#fff;text-shadow:0 0 18px rgba(143,198,255,.6)}
@@ -329,6 +330,7 @@ footer a:hover{color:#6cb8ff}
         <button type="button" role="tab" aria-selected="false" data-site="2" data-i18n="tab2">Detailing</button>
       </div>
       <div class="phone-wrap">
+      <div class="ring-glow" aria-hidden="true"></div>
       <div class="ring" id="ring">
         <div class="phone">
           <div class="screen" id="mock">
