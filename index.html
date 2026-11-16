@@ -23,7 +23,7 @@
   --ink:#070d1f;        /* deep night blue */
   --ink-2:#0f1c3d;      /* raised dark surface */
   --blue:#3a78ff;       /* brand electric blue, a touch brighter */
-  --sky:#8fc6ff;        /* brand light blue */
+  --sky:#6cb8ff;        /* brand light blue */
   --mist:#eef3fc;       /* light section */
   --dim:#a3b2cf;        /* muted text on dark */
   --slate:#4a5876;      /* muted text on light */
@@ -52,8 +52,8 @@ header.bar .wrap{display:flex;align-items:center;gap:28px;height:68px}
 .brand small{display:block;font:600 9.5px var(--body);letter-spacing:.2em;color:var(--sky);margin-top:1px}
 nav.links{display:flex;gap:26px;margin-left:auto;font-size:15px}
 nav.links a{text-decoration:none;color:var(--dim);white-space:nowrap;position:relative;padding:4px 0;transition:color .2s,transform .25s cubic-bezier(.2,.8,.2,1)}
-nav.links a::after{content:"";position:absolute;left:0;bottom:-2px;height:2px;width:100%;background:linear-gradient(90deg,#8fc6ff,#2f6bff);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 10px rgba(79,140,255,.7)}
-nav.links a:hover,nav.links a:focus-visible{color:#8fc6ff;transform:translateY(-1px)}
+nav.links a::after{content:"";position:absolute;left:0;bottom:-2px;height:2px;width:100%;background:linear-gradient(90deg,#6cb8ff,#2f6bff);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 10px rgba(79,140,255,.7)}
+nav.links a:hover,nav.links a:focus-visible{color:#6cb8ff;transform:translateY(-1px)}
 nav.links a:hover::after,nav.links a:focus-visible::after{transform:scaleX(1)}
 .btn{display:inline-flex;align-items:center;gap:8px;font:600 15.5px var(--body);text-decoration:none;padding:12px 20px;border-radius:999px;border:1px solid transparent;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s,border-color .2s}
 .btn.primary{background:linear-gradient(135deg,#3d7bff,#2f6bff 55%,#2a5ae0);color:#fff;position:relative;overflow:hidden;box-shadow:0 0 0 1px rgba(143,198,255,.35),0 6px 22px -6px rgba(47,107,255,.75),0 0 28px -4px rgba(79,140,255,.45);transition:box-shadow .25s,transform .25s,background .2s}
@@ -68,6 +68,18 @@ nav.links a:hover::after,nav.links a:focus-visible::after{transform:scaleX(1)}
 .lang-sw button{font:600 12.5px var(--body);letter-spacing:.04em;color:var(--dim);background:none;border:0;padding:6px 10px;border-radius:999px;cursor:pointer;transition:background .2s,color .2s}
 .lang-sw button:hover{color:#fff}
 .lang-sw button[aria-pressed="true"]{background:rgba(143,198,255,.16);color:#fff}
+.menu-btn{display:none;flex:none;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:none;cursor:pointer;padding:0;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.menu-btn span{display:block;width:18px;height:2px;border-radius:2px;background:#fff;transition:transform .25s,opacity .2s}
+.menu-btn[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] span:nth-child(2){opacity:0}
+.menu-btn[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.mnav{display:none;border-top:1px solid var(--line);padding:6px 24px 14px}
+.mnav.open{display:block}
+.mnav a{display:block;padding:13px 2px;color:#fff;text-decoration:none;font:600 17px var(--body);border-bottom:1px solid var(--line)}
+.mnav a:last-child{border-bottom:0}
+.mnav a:active,.mnav a:hover{color:#6cb8ff}
+@media (max-width:940px){.menu-btn{display:flex}}
+@media (min-width:941px){.mnav{display:none!important}}
 @media (max-width:940px){nav.links{display:none}.lang-sw{margin-left:auto}}
 @media (max-width:480px){header.bar .wrap{gap:10px}header.bar .btn{display:none}}
 @media (max-width:420px){header.bar .btn{padding:10px 14px;font-size:14px}}
@@ -80,7 +92,9 @@ nav.links a:hover::after,nav.links a:focus-visible::after{transform:scaleX(1)}
 
 /* phone with example sites */
 .demo{justify-self:center;position:relative;display:flex;flex-direction:column;align-items:center;gap:18px}
-.demo-label{font-size:12.5px;color:var(--dim);letter-spacing:.04em}
+.demo-label{font-size:13px;color:var(--dim);letter-spacing:.04em;margin-bottom:-8px}
+.demo-hint{font-size:12.5px;color:var(--dim);text-align:center}
+.demo-hint b{color:#6cb8ff;font-weight:600}
 .ring{position:relative;padding:1.5px;border-radius:46px;overflow:hidden;box-shadow:0 40px 90px -20px rgba(0,0,0,.75),0 0 140px -30px rgba(47,107,255,.75)}
 .ring::before{content:"";position:absolute;inset:-60%;background:conic-gradient(from 0deg,rgba(143,198,255,.0),rgba(143,198,255,.9),rgba(47,107,255,.2),rgba(143,198,255,0) 40%,rgba(143,198,255,0) 60%,rgba(79,140,255,.8),rgba(143,198,255,0));animation:spin 8s linear infinite}
 @keyframes spin{to{transform:rotate(1turn)}}
@@ -246,7 +260,7 @@ form .btn{justify-self:start}
 footer{background:var(--ink);border-top:1px solid var(--line);color:var(--dim);font-size:14px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justify-content:space-between;padding-top:30px;padding-bottom:30px}
 footer a{text-decoration:none}
-footer a:hover{color:#8fc6ff}
+footer a:hover{color:#6cb8ff}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
@@ -274,7 +288,15 @@ footer a:hover{color:#8fc6ff}
     </nav>
     <div class="lang-sw" role="group" aria-label="Language / Idioma"><button type="button" data-l="en" aria-pressed="true">EN</button><button type="button" data-l="es" aria-pressed="false">ES</button></div>
     <a class="btn primary" href="#contact" data-i18n="hdr_cta">Get a free preview</a>
+    <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="mnav" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
+  <nav class="mnav" id="mnav" aria-label="Sections">
+    <a href="#how" data-i18n="nav_how">How it works</a>
+    <a href="#included" data-i18n="nav_inc">What's included</a>
+    <a href="#plan" data-i18n="nav_price">Pricing</a>
+    <a href="#about" data-i18n="nav_about">About</a>
+    <a href="#contact" data-i18n="nav_contact">Contact</a>
+  </nav>
 </header>
 
 <main id="top">
@@ -294,7 +316,12 @@ footer a:hover{color:#8fc6ff}
     </div>
 
     <div class="demo">
-      <div class="demo-label" data-i18n="demo_lbl">Example sites · tap to explore</div>
+      <div class="demo-label" data-i18n="demo_lbl">See an example site for</div>
+      <div class="tabs" role="tablist" aria-label="Example business type">
+        <button type="button" role="tab" aria-selected="true" data-site="0" data-i18n="tab0">Mobile bar</button>
+        <button type="button" role="tab" aria-selected="false" data-site="1" data-i18n="tab1">Event venue</button>
+        <button type="button" role="tab" aria-selected="false" data-site="2" data-i18n="tab2">Detailing</button>
+      </div>
       <div class="phone-wrap">
       <div class="ring" id="ring">
         <div class="phone">
@@ -323,11 +350,7 @@ footer a:hover{color:#8fc6ff}
           <span class="tag t4" id="tag-req" data-i18n="req">Requests to your inbox</span>
         </div>
       </div>
-      <div class="tabs" role="tablist" aria-label="Example business type">
-        <button type="button" role="tab" aria-selected="true" data-site="0" data-i18n="tab0">Mobile bar</button>
-        <button type="button" role="tab" aria-selected="false" data-site="1" data-i18n="tab1">Event venue</button>
-        <button type="button" role="tab" aria-selected="false" data-site="2" data-i18n="tab2">Detailing</button>
-      </div>
+      <div class="demo-hint" data-i18n="demo_hint">Tap <b>EN / ES</b> on the phone to switch languages</div>
     </div>
   </div>
 </section>
@@ -553,7 +576,7 @@ footer a:hover{color:#8fc6ff}
 </script>
 <script>
 (function(){
-  var ES={"nav_how": "Cómo funciona", "nav_inc": "Qué incluye", "nav_price": "Precios", "nav_about": "Sobre mí", "nav_contact": "Contacto", "hdr_cta": "Vista previa gratis", "eyebrow": "Sitios web para negocios locales · Área de la Bahía", "h1": "Vea su nuevo sitio web <em>antes de pagar</em> por él.", "lede": "Blue Evolution Interactive crea sitios a la medida para negocios locales con sus propias reseñas, fotos e historia. Primero hacemos una vista previa que funciona. Si le encanta, la publicamos.", "cta_main": "Pedir mi vista previa gratis <span class=\"arr\" aria-hidden=\"true\">→</span>", "cta_inc": "Ver qué incluye", "as1": "Vista previa gratis, sin compromiso", "as2": "Inglés y español", "as3": "Cancele la mensualidad cuando quiera", "demo_lbl": "Sitios de ejemplo · toque para explorar", "tag_ph": "Sus propias fotos", "tag_rv": "Reseñas reales", "req": "Solicitudes a su correo", "tab0": "Bar móvil", "tab1": "Salón de eventos", "tab2": "Detallado de autos", "st_b": "Hecho para", "st0": "bares móviles", "st1": "detallado de autos", "st2": "salones de eventos", "st3": "cabinas de fotos", "st4": "banquetes", "st5": "maestros de música", "st6": "y más", "how_h2": "De su perfil a un sitio publicado en días.", "how_p": "Sin formularios, sin buscar fotos, sin aprender a usar un creador de páginas. Envíe un enlace y nosotros nos encargamos del resto.", "free": "Gratis", "s1h": "Creamos su vista previa", "s1p": "Envíenos el enlace de su Google, Yelp, Facebook o Instagram. Creamos un sitio que funciona con sus reseñas, fotos y horarios reales.", "s2h": "Usted lo hace suyo", "s2p": "Díganos qué cambiar: textos, fotos, colores, servicios. Lo ajustamos hasta que se sienta como su negocio.", "s3h": "Lo publicamos y lo cuidamos", "s3p": "Lo ponemos en su dominio, enviamos su formulario de contacto a su correo y actualizamos sus enlaces de Google, Yelp y Facebook. Cambios pequeños cuando quiera.", "inc_h2": "Todo lo que debe hacer el sitio de un negocio local.", "inc_p": "Cada sitio se construye pensando en cómo sus clientes realmente lo encuentran y lo contactan: desde el celular, muchas veces con prisa y a veces en español.", "f1h": "Sus reseñas reales", "f1p": "Citas breves de sus clientes reales, con nombres y fechas. Nada inventado.", "f2p": "Con un toque cambia todo el sitio, para que sus clientes hispanohablantes se sientan en casa. Vietnamita, chino, coreano y otros idiomas disponibles como extra: <span lang=\"vi\">Tiếng Việt</span> · <span lang=\"zh\">中文</span> · <span lang=\"ko\">한국어</span>.", "f3h": "Barra para llamar y enviar texto", "f3p": "En el celular, Llamar, Texto y su acción principal siempre quedan a la vista mientras la gente se desplaza.", "f4h": "Galería de fotos", "f4p": "Sus propias fotos, retocadas y del tamaño correcto. Toque cualquiera para verla en pantalla completa.", "f5p": "Las solicitudes de cotización y reservación llegan directo a su correo, con los detalles que necesita.", "f6h": "Preguntas frecuentes que le ahorran llamadas", "f6p": "Respuestas a lo que más preguntan sus clientes, basadas en lo que ya dicen sus reseñas.", "f7h": "Su logo y sus colores", "f7p": "Mejoramos su logo para que se vea nítido en todas partes y tomamos de él los colores del sitio.", "f8h": "Rápido y pensado para el celular", "f8p": "Páginas ligeras que cargan rápido en cualquier teléfono. Sin creadores de páginas pesados.", "f9h": "Dominio y enlaces resueltos", "f9p": "Configuramos su dominio y hosting, y conectamos sus perfiles de Google, Yelp y Facebook con el nuevo sitio.", "pl_h2": "Un plan sencillo. Sin sorpresas.", "pl_p": "Usted ve su vista previa terminada antes de pagar nada, así sabe exactamente lo que recibe.", "pl_eb": "Plan de sitio web", "pl_h3": "Un pago inicial + una mensualidad baja", "pl_d": "El pago inicial cubre el diseño y la creación de su sitio. La mensualidad lo mantiene funcionando y al día.", "li1": "Sitio a la medida hecho con sus reseñas y fotos", "li2": "Hosting, su dominio y su formulario de contacto", "li3": "Cambios pequeños cuando quiera: fotos, horarios, precios, promociones", "li4": "Una persona real a quien escribirle cuando necesite un cambio", "vs_h": "¿Por qué no un creador de sitios para hacerlo usted mismo?", "t1a": "Su tiempo", "t1b": "Nosotros lo hacemos. Usted lo revisa.", "t2a": "El diseño", "t2b": "A la medida de su negocio, no una plantilla.", "t3a": "Su contenido", "t3b": "Lo tomamos de sus reseñas y fotos por usted.", "t4a": "Español", "t4b": "Incluido y traducido por nosotros.", "t5a": "Cambios", "t5b": "Escríbanos. Listo.", "ab_h2": "Un estudio pequeño. Trabaja directamente conmigo.", "ab_p1": "Hola, soy <strong>Blair</strong>. Blue Evolution empezó como mi estudio de videojuegos, donde creé y lancé <strong>Polar Rollout</strong> en la App Store. El huevo del logo viene de esa época. Desde entonces he trabajado en publicidad digital.", "ab_p2": "Ahora creo sitios web para negocios locales que son excelentes en lo que hacen, pero no tienen tiempo para ocuparse de un sitio web. Desde la primera vista previa hasta cada cambio después del lanzamiento, usted trata conmigo, no con un centro de llamadas.", "ab_btn": "Escríbame <span class=\"arr\" aria-hidden=\"true\">→</span>", "c_eb": "Vista previa gratis", "c_h2": "¿Quiere ver la suya?", "c_intro": "Envíe el nombre de su negocio y un enlace a su Google, Yelp o Instagram. Haré una vista previa y se la enviaré, normalmente en pocos días. Sin compromiso.", "c_email": "Correo", "l_name": "Su nombre", "l_biz": "Nombre del negocio", "l_reach": "Correo o teléfono", "l_need": "¿Qué necesita?", "o1": "Mi primer sitio web", "o2": "Arreglar un sitio que no funciona", "o3": "Una mejor versión de mi sitio", "o4": "Todavía no sé", "l_link": "Enlace a su Google, Yelp, Facebook o Instagram", "l_msg": "¿Algo más? (opcional)", "c_sub": "Pedir mi vista previa gratis <span class=\"arr\" aria-hidden=\"true\">→</span>"}, nodes=document.querySelectorAll("[data-i18n]"), EN={}, cur="en";
+  var ES={"nav_how": "Cómo funciona", "nav_inc": "Qué incluye", "nav_price": "Precios", "nav_about": "Sobre mí", "nav_contact": "Contacto", "hdr_cta": "Vista previa gratis", "eyebrow": "Sitios web para negocios locales · Área de la Bahía", "h1": "Vea su nuevo sitio web <em>antes de pagar</em> por él.", "lede": "Blue Evolution Interactive crea sitios a la medida para negocios locales con sus propias reseñas, fotos e historia. Primero hacemos una vista previa que funciona. Si le encanta, la publicamos.", "cta_main": "Pedir mi vista previa gratis <span class=\"arr\" aria-hidden=\"true\">→</span>", "cta_inc": "Ver qué incluye", "as1": "Vista previa gratis, sin compromiso", "as2": "Inglés y español", "as3": "Cancele la mensualidad cuando quiera", "demo_lbl": "Vea un sitio de ejemplo para", "demo_hint": "Toque <b>EN / ES</b> en el teléfono para cambiar de idioma", "tag_ph": "Sus propias fotos", "tag_rv": "Reseñas reales", "req": "Solicitudes a su correo", "tab0": "Bar móvil", "tab1": "Salón de eventos", "tab2": "Detallado de autos", "st_b": "Hecho para", "st0": "bares móviles", "st1": "detallado de autos", "st2": "salones de eventos", "st3": "cabinas de fotos", "st4": "banquetes", "st5": "maestros de música", "st6": "y más", "how_h2": "De su perfil a un sitio publicado en días.", "how_p": "Sin formularios, sin buscar fotos, sin aprender a usar un creador de páginas. Envíe un enlace y nosotros nos encargamos del resto.", "free": "Gratis", "s1h": "Creamos su vista previa", "s1p": "Envíenos el enlace de su Google, Yelp, Facebook o Instagram. Creamos un sitio que funciona con sus reseñas, fotos y horarios reales.", "s2h": "Usted lo hace suyo", "s2p": "Díganos qué cambiar: textos, fotos, colores, servicios. Lo ajustamos hasta que se sienta como su negocio.", "s3h": "Lo publicamos y lo cuidamos", "s3p": "Lo ponemos en su dominio, enviamos su formulario de contacto a su correo y actualizamos sus enlaces de Google, Yelp y Facebook. Cambios pequeños cuando quiera.", "inc_h2": "Todo lo que debe hacer el sitio de un negocio local.", "inc_p": "Cada sitio se construye pensando en cómo sus clientes realmente lo encuentran y lo contactan: desde el celular, muchas veces con prisa y a veces en español.", "f1h": "Sus reseñas reales", "f1p": "Citas breves de sus clientes reales, con nombres y fechas. Nada inventado.", "f2p": "Con un toque cambia todo el sitio, para que sus clientes hispanohablantes se sientan en casa. Vietnamita, chino, coreano y otros idiomas disponibles como extra: <span lang=\"vi\">Tiếng Việt</span> · <span lang=\"zh\">中文</span> · <span lang=\"ko\">한국어</span>.", "f3h": "Barra para llamar y enviar texto", "f3p": "En el celular, Llamar, Texto y su acción principal siempre quedan a la vista mientras la gente se desplaza.", "f4h": "Galería de fotos", "f4p": "Sus propias fotos, retocadas y del tamaño correcto. Toque cualquiera para verla en pantalla completa.", "f5p": "Las solicitudes de cotización y reservación llegan directo a su correo, con los detalles que necesita.", "f6h": "Preguntas frecuentes que le ahorran llamadas", "f6p": "Respuestas a lo que más preguntan sus clientes, basadas en lo que ya dicen sus reseñas.", "f7h": "Su logo y sus colores", "f7p": "Mejoramos su logo para que se vea nítido en todas partes y tomamos de él los colores del sitio.", "f8h": "Rápido y pensado para el celular", "f8p": "Páginas ligeras que cargan rápido en cualquier teléfono. Sin creadores de páginas pesados.", "f9h": "Dominio y enlaces resueltos", "f9p": "Configuramos su dominio y hosting, y conectamos sus perfiles de Google, Yelp y Facebook con el nuevo sitio.", "pl_h2": "Un plan sencillo. Sin sorpresas.", "pl_p": "Usted ve su vista previa terminada antes de pagar nada, así sabe exactamente lo que recibe.", "pl_eb": "Plan de sitio web", "pl_h3": "Un pago inicial + una mensualidad baja", "pl_d": "El pago inicial cubre el diseño y la creación de su sitio. La mensualidad lo mantiene funcionando y al día.", "li1": "Sitio a la medida hecho con sus reseñas y fotos", "li2": "Hosting, su dominio y su formulario de contacto", "li3": "Cambios pequeños cuando quiera: fotos, horarios, precios, promociones", "li4": "Una persona real a quien escribirle cuando necesite un cambio", "vs_h": "¿Por qué no un creador de sitios para hacerlo usted mismo?", "t1a": "Su tiempo", "t1b": "Nosotros lo hacemos. Usted lo revisa.", "t2a": "El diseño", "t2b": "A la medida de su negocio, no una plantilla.", "t3a": "Su contenido", "t3b": "Lo tomamos de sus reseñas y fotos por usted.", "t4a": "Español", "t4b": "Incluido y traducido por nosotros.", "t5a": "Cambios", "t5b": "Escríbanos. Listo.", "ab_h2": "Un estudio pequeño. Trabaja directamente conmigo.", "ab_p1": "Hola, soy <strong>Blair</strong>. Blue Evolution empezó como mi estudio de videojuegos, donde creé y lancé <strong>Polar Rollout</strong> en la App Store. El huevo del logo viene de esa época. Desde entonces he trabajado en publicidad digital.", "ab_p2": "Ahora creo sitios web para negocios locales que son excelentes en lo que hacen, pero no tienen tiempo para ocuparse de un sitio web. Desde la primera vista previa hasta cada cambio después del lanzamiento, usted trata conmigo, no con un centro de llamadas.", "ab_btn": "Escríbame <span class=\"arr\" aria-hidden=\"true\">→</span>", "c_eb": "Vista previa gratis", "c_h2": "¿Quiere ver la suya?", "c_intro": "Envíe el nombre de su negocio y un enlace a su Google, Yelp o Instagram. Haré una vista previa y se la enviaré, normalmente en pocos días. Sin compromiso.", "c_email": "Correo", "l_name": "Su nombre", "l_biz": "Nombre del negocio", "l_reach": "Correo o teléfono", "l_need": "¿Qué necesita?", "o1": "Mi primer sitio web", "o2": "Arreglar un sitio que no funciona", "o3": "Una mejor versión de mi sitio", "o4": "Todavía no sé", "l_link": "Enlace a su Google, Yelp, Facebook o Instagram", "l_msg": "¿Algo más? (opcional)", "c_sub": "Pedir mi vista previa gratis <span class=\"arr\" aria-hidden=\"true\">→</span>"}, nodes=document.querySelectorAll("[data-i18n]"), EN={}, cur="en";
   nodes.forEach(function(n,i){n.setAttribute("data-i18n-i",i);EN[i]=n.innerHTML;});
   var btns=document.querySelectorAll(".lang-sw button");
   window.__t=function(en,es){return cur==="es"?es:en;};
@@ -567,6 +590,13 @@ footer a:hover{color:#8fc6ff}
   var saved=null;try{saved=localStorage.getItem("be-lang");}catch(e){}
   if(saved==="es")set("es");
 })();
+</script>
+<script>
+(function(){var b=document.getElementById("menu-btn"),m=document.getElementById("mnav");
+function set(o){m.classList.toggle("open",o);b.setAttribute("aria-expanded",o);}
+b.addEventListener("click",function(){set(!m.classList.contains("open"));});
+m.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){set(false);});});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false);});})();
 </script>
 </body>
 </html>
