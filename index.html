@@ -307,19 +307,13 @@ footer a{text-decoration:none}
 footer a:hover{color:#6cb8ff}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 
-/* custom cursor: desktop mouse only; JS adds .has-cursor, so the normal arrow shows if anything fails */
-.cur-dot,.cur-ring{position:fixed;left:0;top:0;z-index:2147483000;pointer-events:none;border-radius:50%;opacity:0;will-change:transform}
-.cur-dot{width:8px;height:8px;margin:-4px 0 0 -4px;background:var(--sky);box-shadow:0 0 10px rgba(108,184,255,.9),0 0 22px rgba(108,184,255,.45);transition:opacity .2s,width .18s,height .18s,margin .18s}
-.cur-ring{width:36px;height:36px;margin:-18px 0 0 -18px;border:1.5px solid rgba(108,184,255,.5);background:rgba(108,184,255,.04);transition:opacity .2s,width .22s,height .22s,margin .22s,background .22s,border-color .22s}
-html.has-cursor.cur-on .cur-dot,html.has-cursor.cur-on .cur-ring{opacity:1}
-html.has-cursor.cur-hover .cur-ring{width:54px;height:54px;margin:-27px 0 0 -27px;background:rgba(108,184,255,.13);border-color:rgba(160,212,255,.85)}
-html.has-cursor.cur-hover .cur-dot{width:6px;height:6px;margin:-3px 0 0 -3px;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.85)}
-html.has-cursor.cur-down .cur-ring{width:26px;height:26px;margin:-13px 0 0 -13px;background:rgba(108,184,255,.22)}
-html.has-cursor.cur-text .cur-dot,html.has-cursor.cur-text .cur-ring{opacity:0}
-html.has-cursor,html.has-cursor *{cursor:none!important}
-html.has-cursor.cur-text,html.has-cursor.cur-text *{cursor:auto!important}
-html.has-cursor.cur-text input,html.has-cursor.cur-text textarea{cursor:text!important}
-@media (hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){.cur-dot,.cur-ring{display:none}}
+/* cursor glow ring: desktop mouse only; the normal arrow/hand cursor stays, a soft glowing ring follows it */
+.cur-ring{position:fixed;left:0;top:0;z-index:2147483000;pointer-events:none;border-radius:50%;opacity:0;will-change:transform;width:42px;height:42px;margin:-21px 0 0 -21px;border:1.5px solid rgba(108,184,255,.55);background:radial-gradient(circle,rgba(108,184,255,.16),rgba(108,184,255,.05) 65%,transparent 72%);box-shadow:0 0 18px rgba(108,184,255,.35),inset 0 0 12px rgba(108,184,255,.18);transition:opacity .2s,width .22s,height .22s,margin .22s,border-color .22s,box-shadow .22s}
+html.has-cursor.cur-on .cur-ring{opacity:1}
+html.has-cursor.cur-hover .cur-ring{width:58px;height:58px;margin:-29px 0 0 -29px;border-color:rgba(170,216,255,.9);box-shadow:0 0 26px rgba(108,184,255,.55),inset 0 0 16px rgba(108,184,255,.3)}
+html.has-cursor.cur-down .cur-ring{width:34px;height:34px;margin:-17px 0 0 -17px}
+html.has-cursor.cur-text .cur-ring{opacity:0}
+@media (hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){.cur-ring{display:none}}
 </style>
 </head>
 <body>
@@ -715,15 +709,14 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false);}
 /* custom cursor (desktop mouse only) */
 (function(){
   if(!window.matchMedia||!matchMedia("(hover:hover) and (pointer:fine)").matches||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
-  var de=document.documentElement,dot=document.createElement("div"),ring=document.createElement("div");
-  dot.className="cur-dot";ring.className="cur-ring";dot.setAttribute("aria-hidden","true");ring.setAttribute("aria-hidden","true");
-  document.body.appendChild(ring);document.body.appendChild(dot);
+  var de=document.documentElement,ring=document.createElement("div");
+  ring.className="cur-ring";ring.setAttribute("aria-hidden","true");
+  document.body.appendChild(ring);
   var mx=-100,my=-100,rx=-100,ry=-100,on=false,raf=0;
   var HOVER="a,button,[role=button],summary,label,select,input[type=submit],input[type=checkbox],input[type=radio],.tabs button,.ring";
   var TEXT="input:not([type=submit]):not([type=checkbox]):not([type=radio]),textarea";
   function loop(){rx+=(mx-rx)*.2;ry+=(my-ry)*.2;
-    dot.style.transform="translate3d("+mx+"px,"+my+"px,0)";
-    ring.style.transform="translate3d("+rx+"px,"+ry+"px,0)";
+    ring.style.transform="translate3d("+(rx+5)+"px,"+(ry+8)+"px,0)";
     if(Math.abs(mx-rx)>.1||Math.abs(my-ry)>.1)raf=requestAnimationFrame(loop);else raf=0;}
   function kick(){if(!raf)raf=requestAnimationFrame(loop);}
   document.addEventListener("pointermove",function(e){
