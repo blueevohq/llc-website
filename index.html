@@ -287,6 +287,13 @@ textarea{min-height:110px;resize:vertical}
 form .btn{justify-self:start}
 .note{grid-column:1/-1;margin:0;font-size:14px;color:var(--slate);min-height:1.4em}
 .note.ok{color:#14703a;font-weight:600}
+form.sent>*:not(.sent-card){display:none!important}
+.sent-card{grid-column:1/-1;text-align:center;padding:26px 8px 18px;animation:sentIn .45s cubic-bezier(.2,.8,.2,1) both}
+.sent-card .chk{width:56px;height:56px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;background:#e8f7ee;color:#14703a;box-shadow:0 0 0 8px #f3fbf6}
+.sent-card h3{font-size:24px;margin:0 0 8px;color:#0b1220}
+.sent-card p{margin:0 auto 6px;max-width:400px;color:var(--slate);font-size:15.5px;line-height:1.55}
+.sent-card button{margin-top:14px;background:none;border:0;color:#2f6bff;font:600 14px var(--body);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+@keyframes sentIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (max-width:860px){.contact .wrap{grid-template-columns:1fr}form{grid-template-columns:1fr;padding:22px}}
 
 footer{background:var(--ink);border-top:1px solid var(--line);color:var(--dim);font-size:14px}
@@ -618,9 +625,19 @@ footer a:hover{color:#6cb8ff}
       .then(function(j){
         done();
         if(!j||!j.success) throw new Error("fail");
-        form.reset();
-        note.className="note ok";
-        note.textContent=window.__t("Thanks! I got your request and will reply within 1 business day.","¡Gracias! Recibí su solicitud y le responderé en 1 día hábil.");
+        var first=(data["Name"]||"").split(/\s+/)[0]; first=first?first.charAt(0).toUpperCase()+first.slice(1):"";
+        form.reset(); note.className="note"; note.textContent="";
+        var card=document.createElement("div"); card.className="sent-card"; card.setAttribute("role","status"); card.tabIndex=-1;
+        var esc=function(t){return t.replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});};
+        card.innerHTML='<div class="chk"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>'+
+          "<h3>"+esc(window.__t("Thanks"+(first?", "+first:"")+"!","¡Gracias"+(first?", "+first:"")+"!"))+"</h3>"+
+          "<p>"+esc(window.__t("Your request is in. I'll build your free preview and email you the link, usually within a few days.","Recibí su solicitud. Haré su vista previa gratis y le enviaré el enlace por correo, normalmente en pocos días."))+"</p>"+
+          (isEmail?"<p>"+esc(window.__t("Keep an eye on your inbox for a note from me in the next few minutes.","Revise su correo: le escribiré en unos minutos."))+"</p>":"<p>"+esc(window.__t("I'll reach out at the number you left.","Le contactaré al número que dejó."))+"</p>")+
+          "<button type=\"button\">"+esc(window.__t("Send another request","Enviar otra solicitud"))+"</button>";
+        card.querySelector("button").addEventListener("click",function(){ card.remove(); form.classList.remove("sent"); document.getElementById("f-name").focus(); });
+        form.appendChild(card); form.classList.add("sent");
+        var top=form.getBoundingClientRect().top; if(top<70||top>innerHeight*0.6) form.scrollIntoView({behavior:"smooth",block:"center"});
+        card.focus({preventScroll:true});
       })
       .catch(function(){
         done();
