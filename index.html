@@ -712,17 +712,15 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false);}
   var de=document.documentElement,ring=document.createElement("div");
   ring.className="cur-ring";ring.setAttribute("aria-hidden","true");
   document.body.appendChild(ring);
-  var mx=-100,my=-100,rx=-100,ry=-100,on=false,raf=0;
+  var mx=-100,my=-100,on=false,raf=0;
   var HOVER="a,button,[role=button],summary,label,select,input[type=submit],input[type=checkbox],input[type=radio],.tabs button,.ring";
   var TEXT="input:not([type=submit]):not([type=checkbox]):not([type=radio]),textarea";
-  function loop(){rx+=(mx-rx)*.2;ry+=(my-ry)*.2;
-    ring.style.transform="translate3d("+(rx+5)+"px,"+(ry+8)+"px,0)";
-    if(Math.abs(mx-rx)>.1||Math.abs(my-ry)>.1)raf=requestAnimationFrame(loop);else raf=0;}
-  function kick(){if(!raf)raf=requestAnimationFrame(loop);}
+  function place(){raf=0;ring.style.transform="translate3d("+(mx+5)+"px,"+(my+8)+"px,0)";}
+  function kick(){if(!raf)raf=requestAnimationFrame(place);}
   document.addEventListener("pointermove",function(e){
     if(e.pointerType&&e.pointerType!=="mouse")return;
     mx=e.clientX;my=e.clientY;
-    if(!on){on=true;rx=mx;ry=my;de.classList.add("has-cursor","cur-on");}
+    if(!on){on=true;de.classList.add("has-cursor","cur-on");}
     var t=e.target&&e.target.closest?e.target:null;
     de.classList.toggle("cur-text",!!(t&&t.closest(TEXT)));
     de.classList.toggle("cur-hover",!!(t&&t.closest(HOVER)&&!t.closest(TEXT)));
