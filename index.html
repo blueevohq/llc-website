@@ -491,6 +491,7 @@ footer a:hover{color:#6cb8ff}
       <label class="full"><span data-i18n="l_link">Link to your Google, Yelp, Facebook or Instagram</span><input id="f-link" name="link" placeholder="https://"></label>
       <label class="full"><span data-i18n="l_msg">Anything else? (optional)</span><textarea id="f-msg" name="message"></textarea></label>
       <button class="btn primary" type="submit" data-i18n="c_sub">Request my free preview <span class="arr" aria-hidden="true">→</span></button>
+      <input type="checkbox" id="f-bot" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
       <p class="note" id="fnote" role="status"></p>
     </form>
   </div>
@@ -578,7 +579,7 @@ footer a:hover{color:#6cb8ff}
   // ---- feature cards light up under the cursor ----
   [].forEach.call(document.querySelectorAll(".feat div"),function(c){c.addEventListener("pointermove",function(e){var r=c.getBoundingClientRect();c.style.setProperty("--x",(e.clientX-r.left)+"px");c.style.setProperty("--y",(e.clientY-r.top)+"px");});});
 
-  // ---- contact form: opens an email with the details filled in ----
+  // ---- contact form: sends through Web3Forms to hello@ ----
   var form=document.getElementById("cform"), note=document.getElementById("fnote");
   form.addEventListener("submit",function(e){
     e.preventDefault();
@@ -586,11 +587,40 @@ footer a:hover{color:#6cb8ff}
     if(!v("f-name")||!v("f-reach")||(!v("f-biz")&&!v("f-link"))){
       note.className="note"; note.textContent=window.__t("Add your name, how to reach you, and your business name or a link so I can build your preview.","Agregue su nombre, cómo contactarle y el nombre de su negocio o un enlace para que pueda hacer su vista previa."); return;
     }
-    var body="Name: "+v("f-name")+"\nBusiness: "+v("f-biz")+"\nReach me at: "+v("f-reach")+"\nNeed: "+v("f-need")+"\nLink: "+v("f-link")+"\n\n"+v("f-msg");
-    var href="mailto:hello@blueevolutioninteractive.com?subject="+encodeURIComponent("Free preview request: "+(v("f-biz")||v("f-name")))+"&body="+encodeURIComponent(body);
-    note.className="note ok";
-    note.textContent=window.__t("Thanks! Your email app should open with everything filled in. If it doesn't, email hello@blueevolutioninteractive.com.","¡Gracias! Su aplicación de correo debería abrirse con todo listo. Si no se abre, escriba a hello@blueevolutioninteractive.com.");
-    try{ window.location.href=href; }catch(_){}
+    if(form.dataset.busy) return;
+    var btn=form.querySelector('button[type="submit"]');
+    var reach=v("f-reach"), isEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(reach);
+    var data={
+      access_key:"dc606af2-de61-4909-b2e6-d6182abb02c0",
+      subject:"Free preview request: "+(v("f-biz")||v("f-name")),
+      from_name:"Blue Evolution website",
+      botcheck:document.getElementById("f-bot").checked,
+      "Name":v("f-name"),
+      "Business":v("f-biz"),
+      "Reach me at":reach,
+      "Need":v("f-need"),
+      "Link":v("f-link"),
+      "Message":v("f-msg"),
+      "Site language":(document.documentElement.lang||"en")
+    };
+    if(isEmail) data.replyto=reach;
+    form.dataset.busy="1"; btn.disabled=true; btn.style.opacity=".6";
+    note.className="note"; note.textContent=window.__t("Sending…","Enviando…");
+    var done=function(){ delete form.dataset.busy; btn.disabled=false; btn.style.opacity=""; };
+    fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify(data)})
+      .then(function(r){return r.json();})
+      .then(function(j){
+        done();
+        if(!j||!j.success) throw new Error("fail");
+        form.reset();
+        note.className="note ok";
+        note.textContent=window.__t("Thanks! I got your request and will reply within 1 business day.","¡Gracias! Recibí su solicitud y le responderé en 1 día hábil.");
+      })
+      .catch(function(){
+        done();
+        note.className="note";
+        note.textContent=window.__t("Sorry, that didn't go through. Please email hello@blueevolutioninteractive.com instead.","Lo siento, no se pudo enviar. Por favor escriba a hello@blueevolutioninteractive.com.");
+      });
   });
 
   // ---- links to the form scroll to it and focus the first field ----
