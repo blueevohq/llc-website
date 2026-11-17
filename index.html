@@ -287,6 +287,10 @@ textarea{min-height:110px;resize:vertical}
 form .btn{justify-self:start}
 .note{grid-column:1/-1;margin:0;font-size:14px;color:var(--slate);min-height:1.4em}
 .note.ok{color:#14703a;font-weight:600}
+#cform .note{margin-top:10px}
+.note.err{color:#b42318;font-weight:600;display:flex;gap:8px;align-items:flex-start}
+.note.err::before{content:"!";flex:none;width:18px;height:18px;margin-top:1px;border-radius:50%;background:#b42318;color:#fff;font:700 12px/18px var(--body);text-align:center}
+#cform [aria-invalid="true"]{border-color:#e0a39d;background:#fff7f6;box-shadow:0 0 0 3px rgba(180,35,24,.10)}
 form.sent>*:not(.sent-card){display:none!important}
 .sent-card{grid-column:1/-1;text-align:center;padding:26px 8px 18px;animation:sentIn .45s cubic-bezier(.2,.8,.2,1) both}
 .sent-card .chk{width:56px;height:56px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;background:#e8f7ee;color:#14703a;box-shadow:0 0 0 8px #f3fbf6}
@@ -593,12 +597,24 @@ footer a:hover{color:#6cb8ff}
   [].forEach.call(document.querySelectorAll(".feat div"),function(c){c.addEventListener("pointermove",function(e){var r=c.getBoundingClientRect();c.style.setProperty("--x",(e.clientX-r.left)+"px");c.style.setProperty("--y",(e.clientY-r.top)+"px");});});
 
   // ---- contact form: sends through Web3Forms to hello@ ----
+  ["f-name","f-reach","f-biz","f-link"].forEach(function(id){ document.getElementById(id).addEventListener("input",function(){
+    this.removeAttribute("aria-invalid"); if(id==="f-biz"||id==="f-link"){document.getElementById("f-biz").removeAttribute("aria-invalid");document.getElementById("f-link").removeAttribute("aria-invalid");}
+    if(!form.querySelector("[aria-invalid]")&&/\berr\b/.test(note.className)){note.className="note";note.textContent="";}
+  });});
+  var needSel=document.getElementById("f-need"), linkLbl=document.querySelector('[data-i18n="l_link"]'), linkIn=document.getElementById("f-link");
+  function linkLabel(){ var has=needSel.selectedIndex===1||needSel.selectedIndex===2;
+    linkLbl.textContent=has?window.__t("Link to your current website","Enlace a su sitio web actual"):window.__t("Link to your Google, Yelp, Facebook or Instagram","Enlace a su Google, Yelp, Facebook o Instagram");
+    linkIn.placeholder=has?window.__t("yourbusiness.com","sunegocio.com"):"https://"; }
+  needSel.addEventListener("change",linkLabel); window.__linkLabel=linkLabel;
   var form=document.getElementById("cform"), note=document.getElementById("fnote");
   form.addEventListener("submit",function(e){
     e.preventDefault();
     var v=function(id){return document.getElementById(id).value.trim();};
-    if(!v("f-name")||!v("f-reach")||(!v("f-biz")&&!v("f-link"))){
-      note.className="note"; note.textContent=window.__t("Add your name, how to reach you, and your business name or a link so I can build your preview.","Agregue su nombre, cómo contactarle y el nombre de su negocio o un enlace para que pueda hacer su vista previa."); return;
+    var miss=[]; if(!v("f-name")) miss.push("f-name"); if(!v("f-reach")) miss.push("f-reach"); if(!v("f-biz")&&!v("f-link")) miss.push("f-biz","f-link");
+    ["f-name","f-reach","f-biz","f-link"].forEach(function(id){ var el=document.getElementById(id); if(miss.indexOf(id)>-1) el.setAttribute("aria-invalid","true"); else el.removeAttribute("aria-invalid"); });
+    if(miss.length){
+      note.className="note err"; note.textContent=window.__t("Add your name, how to reach you, and your business name or a link so I can build your preview.","Agregue su nombre, cómo contactarle y el nombre de su negocio o un enlace para que pueda hacer su vista previa.");
+      var order=["f-name","f-biz","f-reach","f-link"]; document.getElementById(order.filter(function(i){return miss.indexOf(i)>-1;})[0]).focus(); return;
     }
     if(form.dataset.busy) return;
     var btn=form.querySelector('button[type="submit"]');
@@ -641,7 +657,7 @@ footer a:hover{color:#6cb8ff}
       })
       .catch(function(){
         done();
-        note.className="note";
+        note.className="note err";
         note.textContent=window.__t("Sorry, that didn't go through. Please email hello@blueevolutioninteractive.com instead.","Lo siento, no se pudo enviar. Por favor escriba a hello@blueevolutioninteractive.com.");
       });
   });
@@ -666,6 +682,7 @@ footer a:hover{color:#6cb8ff}
     btns.forEach(function(b){b.setAttribute("aria-pressed",b.getAttribute("data-l")===l);});
     try{localStorage.setItem("be-lang",l);}catch(e){}
     if(window.__mockLang)window.__mockLang(l);
+    if(window.__linkLabel)window.__linkLabel();
   }
   btns.forEach(function(b){b.addEventListener("click",function(){set(b.getAttribute("data-l"));});});
   var saved=null;try{saved=localStorage.getItem("be-lang");}catch(e){}
